@@ -1,0 +1,81 @@
+allprojects {
+    apply plugin: 'idea'
+
+    version = '0.0.1'
+}
+
+/**
+ * The following code can be extracted to another sub-project, or you can keep it in the root project.
+ */
+repositories {
+    // For example: https://nodejs.org/dist/v10.16.3/node-v10.16.3-linux-x64.tar.xz
+    ivy {
+        url 'https://nodejs.org/dist/'
+        patternLayout {
+            //This maps to the pattern: [organisation]:[module]:[revision]:[classifier]@[ext]
+            artifact '/v[revision]/[organisation]-v[revision]-[module].[ext]'
+        }
+    }
+}
+
+configurations {
+    nodejs
+}
+
+dependencies {
+    // to be able to download nodejs as a dependency
+    nodejs group: 'node', name: project.'nodejs.platform', version: project.'nodejs.version', ext: 'tar.xz'
+}
+
+/**
+ * This task also code can be extracted to another sub-project.
+ */
+def nodeJsHome = file("$projectDir/node-v${project.'nodejs.version'}-${project.'nodejs.platform'}")
+
+task installNodeJs() {
+    group = 'NodeJs'
+    description = 'Install NodeJs'
+
+    onlyIf {
+        !nodeJsHome.exists()
+    }
+
+    doLast {
+        println "NodeJs: ${project.'nodejs.version'} will be installed..."
+        def dist = project.configurations.nodejs.files[0]
+        exec {
+            commandLine 'tar', '-xf', dist.path, '-C', projectDir
+        }
+    }
+}
+
+/**
+ * I would like to use: nodejs, npm and npx.
+ * I want to enter something like this:
+ *          ./gradlew project-name:{nodejs|npm|npx} <<<'a list of options'
+ */
+subprojects {
+    // going through {nodejs|npm|npx}
+    fileTree(file("$nodeJsHome/bin"))
+            .files
+            .each { f ->
+                // creates a new task under sub-projects
+                task "${f.name}"(dependsOn: parent.tasks['installNodeJs']) {
+                    group 'NodeJs'
+                    description "To be able to use: ${f.path}"
+
+                    doLast {
+                        def options = new Scanner(System.in).nextLine().split(' ')
+                        println ">> Executing: ${f.path}"
+                        println ">> Options $options"
+                        exec {
+                            println ">> Working Dir: $workingDir"
+                            executable f.path
+                            args options
+                            errorOutput = System.out
+                            ignoreExitValue = true
+                        }
+                    }
+                }
+            }
+}
