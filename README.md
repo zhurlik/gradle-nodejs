@@ -83,10 +83,10 @@ After that you will have the following tasks:
 * **npx** - To be able to use: /github/gradle-nodejs/node-v10.16.3-linux-x64/bin/npx
 # How to use
 The following examples will show how you will be able to use that:
-## node <options>
+## node `<options>`
 * **node --help** `./gradlew nodejs-projectA:node <<<--help`
-## npm <options>
+## npm `<options>`
 * **npm -v** `./gradlew nodejs-projectB:npm <<<-v`
 * **npm install --save-dev webpack** `./gradlew nodejs-projectA:npm <<<'install --save-dev webpack'`
-## npx <options>
+## npx `<options>`
 * **npx webpack --colors** `./gradlew nodejs-projectB:npx <<<'webpack --colors'`
