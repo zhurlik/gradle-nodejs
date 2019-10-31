@@ -47,6 +47,40 @@ task installNodeJs() {
     }
 }
 ```
+# Subprojects and node tasks
+The code below shows how you can add new tasks to subprojects: 
+```groovy
+subprojects {
+    // going through {nodejs|npm|npx}
+    fileTree(file("$nodeJsHome/bin"))
+            .files
+            .each { f ->
+                // creates a new task under sub-projects
+                task "${f.name}"(dependsOn: parent.tasks['installNodeJs']) {
+                    group 'NodeJs'
+                    description "To be able to use: ${f.path}"
+
+                    doLast {
+                        def options = new Scanner(System.in).nextLine().split(' ')
+                        println ">> Executing: ${f.path}"
+                        println ">> Options $options"
+                        exec {
+                            println ">> Working Dir: $workingDir"
+                            executable f.path
+                            args options
+                            errorOutput = System.out
+                            ignoreExitValue = true
+                        }
+                    }
+                }
+            }
+}
+```
+After that you will have the following tasks:
+* **installNodeJs** - Install NodeJs
+* **node** - To be able to use: /gradle-nodejs/node-v10.16.3-linux-x64/bin/node
+* **npm** - To be able to use: /gradle-nodejs/node-v10.16.3-linux-x64/bin/npm
+* **npx** - To be able to use: /github/gradle-nodejs/node-v10.16.3-linux-x64/bin/npx
 # How to use
 The following examples will show how you will be able to use that:
 ## node <options>
