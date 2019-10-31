@@ -48,7 +48,7 @@ task installNodeJs() {
 }
 ```
 # Subprojects and node tasks
-The code below shows how you can add new tasks to subprojects: 
+The code below shows how you can add new tasks into subprojects: 
 ```groovy
 subprojects {
     // going through {nodejs|npm|npx}
@@ -76,6 +76,8 @@ subprojects {
             }
 }
 ```
+## Standard Input
+The main tick is to pass the arguments through standard input, and have your task read from it.  
 After that you will have the following tasks:
 * **installNodeJs** - Install NodeJs
 * **node** - To be able to use: /gradle-nodejs/node-v10.16.3-linux-x64/bin/node
