@@ -77,7 +77,15 @@ subprojects {
 }
 ```
 ## Standard Input
-The main tick is to pass the arguments through standard input, and have your task read from it.  
+The main trick is to pass the arguments through standard input.
+```groovy
+def options = new Scanner(System.in).nextLine().split(' ')
+exec {
+    executable ...
+    args options
+    ...
+}
+```
 After that you will have the following tasks:
 * **installNodeJs** - Install NodeJs
 * **node** - To be able to use: /gradle-nodejs/node-v10.16.3-linux-x64/bin/node
