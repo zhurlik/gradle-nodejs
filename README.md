@@ -25,7 +25,7 @@ dependencies {
     nodejs group: 'node', name: project.'nodejs.platform', version: project.'nodejs.version', ext: 'tar.xz'
 }
 ```
-**Note::** the version of NodeJs you can specify in the [gradle.properties](./gradle.properties)
+**Note:** the version of NodeJs you can specify in the [gradle.properties](./gradle.properties)
 * A task for installing NodeJs
  ```groovy
 def nodeJsHome = file("$projectDir/node-v${project.'nodejs.version'}-${project.'nodejs.platform'}")
