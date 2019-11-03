@@ -52,10 +52,10 @@ task installNodeJs() {
 /**
  * I would like to use: nodejs, npm and npx.
  * I want to enter something like this:
- *          ./gradlew project-name:{nodejs|npm|npx} <<<'a list of options'
+ *          ./gradlew project-name:{node|npm|npx} <<<'a list of options'
  */
 subprojects {
-    // going through {nodejs|npm|npx}
+    // going through {node|npm|npx}
     fileTree(file("$nodeJsHome/bin")).files.each { f ->
         // creates a new task under sub-projects
         task "${f.name}"(dependsOn: parent.tasks['installNodeJs']) {

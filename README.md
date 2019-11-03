@@ -51,7 +51,7 @@ task installNodeJs() {
 The code below shows how you can add new tasks into subprojects: 
 ```groovy
 subprojects {
-    // going through {nodejs|npm|npx}
+    // going through {node|npm|npx}
     fileTree(file("$nodeJsHome/bin")).files.each { f ->
         // creates a new task under sub-projects
         task "${f.name}"(dependsOn: parent.tasks['installNodeJs']) {
