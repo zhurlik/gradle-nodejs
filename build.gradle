@@ -68,8 +68,9 @@ subprojects {
                         def options = new Scanner(System.in).nextLine().split(' ')
                         println ">> Executing: ${f.path}"
                         println ">> Options $options"
+                        println ">> Working Dir: $projectDir"
                         exec {
-                            println ">> Working Dir: $workingDir"
+                            workingDir projectDir
                             executable f.path
                             args options
                             errorOutput = System.out
