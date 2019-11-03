@@ -52,28 +52,27 @@ The code below shows how you can add new tasks into subprojects:
 ```groovy
 subprojects {
     // going through {nodejs|npm|npx}
-    fileTree(file("$nodeJsHome/bin"))
-            .files
-            .each { f ->
-                // creates a new task under sub-projects
-                task "${f.name}"(dependsOn: parent.tasks['installNodeJs']) {
-                    group 'NodeJs'
-                    description "To be able to use: ${f.path}"
+    fileTree(file("$nodeJsHome/bin")).files.each { f ->
+        // creates a new task under sub-projects
+        task "${f.name}"(dependsOn: parent.tasks['installNodeJs']) {
+            group 'NodeJs'
+            description "To be able to use: ${f.path}"
 
-                    doLast {
-                        def options = new Scanner(System.in).nextLine().split(' ')
-                        println ">> Executing: ${f.path}"
-                        println ">> Options $options"
-                        exec {
-                            println ">> Working Dir: $workingDir"
-                            executable f.path
-                            args options
-                            errorOutput = System.out
-                            ignoreExitValue = true
-                        }
-                    }
+            doLast {
+                def options = new Scanner(System.in).nextLine().split(' ')
+                println ">> Executing: ${f.path}"
+                println ">> Options $options"
+                println ">> Working Dir: $projectDir"
+                exec {
+                    workingDir projectDir
+                    executable f.path
+                    args options
+                    errorOutput = System.out
+                    ignoreExitValue = true
                 }
             }
+        }
+    }
 }
 ```
 ## Standard Input
